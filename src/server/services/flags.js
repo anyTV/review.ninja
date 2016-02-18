@@ -13,8 +13,8 @@ module.exports = {
         var open = 0;
         var closed = 0;
 
-        var negative = /\!\bfix\b|\!\bresolve\b/g;
-        var positive = /\!\bfixed\b|\!\bresolved\b|\!\bcompleted\b/g;
+        var negative = /\!\bfix\b|\!\bresolve\b|\b\!AllenNoLikey\b/g;
+        var positive = /\!\bfixed\b|\!\bresolved\b|\!\bcompleted\b|\b\!AllenApproves\b/g;
 
         comments.forEach(function(comment) {
             var ref = reference(comment.original_commit_id, comment.path, comment.original_position);
