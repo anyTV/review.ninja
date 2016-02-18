@@ -46,12 +46,12 @@ module.exports = {
     },
 
     star: function(comment) {
-        var starRegex = /\!star|\!ninjastar|\+1|\:thumbsup\:|\:star\:|\:allenapproves\:/g;
+        var starRegex = /\!star|\!ninjastar|\+1|\:thumbsup\:|\:star\:|AllenApproves/g;
         return !!comment.match(starRegex);
     },
 
     unstar: function(comment) {
-        var unstarRegex = /\!unstar|\-1|\:thumbsdown\:|\:allennolikey\:/g;
+        var unstarRegex = /\!unstar|\-1|\:thumbsdown\:|AllenNoLikey/g;
         return !!comment.match(unstarRegex);
     }
 
