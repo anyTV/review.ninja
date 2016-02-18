@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title" style="display:inline-block;">Be proud of ReviewNinja</h3>
+    <p class="pull-right"><img style="margin-top: 7px;" ng-src="/{{ repo.value.id }}/badge" /></p>
+</div>
+<div class="modal-body">
+    <p>Display your badge of honour proudly on GitHub by copy and pasting the following into your README file:</p>
+    <p>
+    <select ng-init="selectedFormat = 1;formatText=formats[1]['link']" ng-options="format.id as format.title for format in formats" ng-model='selectedFormat' ng-change="update()">
+    </select>
+	</p>
+    <pre ng-model="formatText">{{formatText}}</pre>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

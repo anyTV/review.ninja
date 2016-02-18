@@ -1,0 +1,111 @@
+{
+  "name": "ReviewNinja",
+  "website": "http://review.ninja/",
+  "description": "ReviewNinja - merge with confidence. A code review tool that integrates into GitHub.",
+  "keywords": [
+    "code review",
+    "github"
+  ],
+  "repository": "https://github.com/reviewninja/review.ninja",
+  "logo": "https://raw.githubusercontent.com/reviewninja/review.ninja/master/src/client/assets/images/review-ninja-250.png",
+  "success_url": "/",
+  "env": {
+    "HOST": {
+      "description": "The hostname of your application",
+      "value": "reviewninja.herokuapp.com"
+    },
+    "PROTOCOL": {
+      "description": "The protocol your application uses, can be either 'http' or 'https'.",
+      "value": "https"
+    },
+    "SESSION_SECRET": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "GITHUB_CLIENT": {
+      "description": "Client ID of your GitHub Application. You can create a new application here: https://github.com/settings/applications/new. You should set the callback URL to <PROTOCOL>://<HOST>/auth/github/callback."
+    },
+    "GITHUB_SECRET": {
+      "description": "Client Secret of your GitHub Application."
+    },
+    "GITHUB_HOST":{
+      "description": "The hostname of your target GitHub instance. Defaults to 'github.com'.",
+      "required": false
+    },
+    "GITHUB_PROTOCOL": {
+      "description": "The protocol of your target GitHub instance. Defaults to 'https'.",
+      "required": false
+    },
+    "GITHUB_API_HOST": {
+      "description": "The API endpoint of your target GitHub instance. Defaults to 'api.github.com'.",
+      "required": false
+    },
+    "GITHUB_API_PATHPREFIX": {
+      "description": "The path prefix for the API endpoint of your target GitHub instance. For example '/api/v3' would be appended to 'company.github.com' resulting in 'company.github.com/api/v3'.",
+      "required": false
+    },
+    "GITHUB_VERSION": {
+      "description": "The API version of your target GitHub instance to use. Defaults to '3.0.0'.",
+      "required": false
+    },
+    "GITHUB_USER": {
+      "description": "Required if you wish for a 'ReviewNinja' user to comment on PRs.",
+      "required": false
+    },
+    "GITHUB_PASS": {
+      "description": "Required if you wish for a 'ReviewNinja' user to comment on PRs. Generate a token here: https://github.com/settings/tokens/new. Only public_repo is necessary.",
+      "required": false
+    },
+    "SMTP_HOST": {
+      "description": "The hostname of your SMTP server, used for email notifications.",
+      "required": false
+    },
+    "SMTP_SSL": {
+      "description": "Set to 'true' if your SMTP server uses SSL.",
+      "required": false
+    },
+    "SMTP_PORT": {
+      "description": "Defaults to 25 or 465.",
+      "required": false
+    },
+    "SMTP_USER": {
+      "description": "SMTP auth user.",
+      "required": false
+    },
+    "SMTP_PASS": {
+      "description": "SMTP auth password.",
+      "required": false
+    },
+    "SMTP_FROM": {
+      "description": "Email address notifications are sent from. Defaults to 'ReviewNinja <noreply@review.ninja>'.",
+      "required": false
+    },
+    "TERMS_URL": {
+      "description": "A terms of use for your ReviewNinja application. GitHub Gists work well.",
+      "required": false
+    },
+    "GACODE": {
+      "description": "Google Analytics tracking code.",
+      "required": false
+    },
+    "SLACK_HOST": {
+      "description": "Slack hostname for ReviewNinja slack-hooks (https://github.com/reviewninja/slack-hooks).",
+      "required": false
+    },
+    "SLACK_PORT": {
+      "description": "Slack port. Defaults to 80 or 443.",
+      "required": false
+    },
+    "SLACK_PORT": {
+      "description": "Slack port.",
+      "required": false
+    },
+    "SLACK_PATH": {
+      "description": "Slack path, appended to HOST andm PORT to create <HOST>:<PORT><PATH>.",
+      "required": false
+    }
+  },
+  "addons": [
+    "mongolab:sandbox"
+  ]
+}

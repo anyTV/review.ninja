@@ -1,0 +1,171 @@
+<tabset class="review-tabs">
+  <tab>
+    <tab-heading>
+      <span class="octicon octicon-code"></span> 
+      <span class="hidden-sm hidden-md">Review Status</span>
+    </tab-heading>
+    <table class="table" ng-if="review.loaded && !review.value.length">
+      <tr>
+        <td>
+          <div>
+            <p><strong>Welcome to Review Status!</strong></p>
+            <p>This is where code review comments (line notes) and review statuses live.</p>
+            <p>As line notes and statuses are created, they’ll appear here in a list. To get started, click on a line of code to add a comment.</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <table class="table table-hover">
+      <tbody ng-repeat="(ref, thread) in review.thread">
+      <tr class="select"
+          ng-click="$state.go('repo.pull.review.reviewItem', {
+              base: pull.base.sha,
+              head: thread.sha,
+              ref: ref
+            })">
+        <td style="width:40px; padding-right:0; border-bottom: 0;">
+          <img ng-src="{{ thread.avatar }}&s=42" width="42px" />
+        </td>
+        <td style="border-bottom: 0;">
+          <p>
+            <strong>{{ thread.author }}</strong> reviewed <br />
+            {{ thread.body | limitTo:100 }}<span ng-show="thread.body.length > 100">...</span><br />
+            <small moment="thread.last_updated"></small>
+          </p>
+        </td>
+        <td class="text-center text-primary" style="width:50px; padding-left:0; border-bottom: 0;">
+          <i class="octicon octicon-comment"></i>
+          {{ (thread.comments | unique:'id').length }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="background: #ececec; padding: 5px 25px;">
+          <a ng-click="scrollTo(thread.anchor)" class="label label-default">
+            {{ thread.sha | limitTo:7 }} {{ thread.file }}:{{ comp.value.numbs[thread.path][thread.position].head || comp.value.numbs[thread.path][thread.position].base }}
+          </a>
+          <div dropdown 
+               class="btn-group pull-right" 
+               ng-class="{'wobble-vertical': $root.ob === 'ob-addstatus' && $index === 0}" 
+               ng-click="$event.stopPropagation()" 
+               is-open="dropdownOpen">
+            <button dropdown-toggle 
+                    class="btn btn-xs btn-default dropdown-toggle" 
+                    ng-class="{'btn-warning': thread.state === 'open', 'btn-primary': thread.state === 'closed'}" 
+                    type="button" 
+                    data-toggle="dropdown" 
+                    aria-haspopup="true" 
+                    aria-expanded="true">
+              {{ thread.label }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-hide="thread.state === 'open'">
+                <a href="" ng-click="addReviewComment({body: '!fix'}, ref); dropdownOpen = false;">
+                  <i class="fa fa-exclamation text-warning"></i> fix
+                </a>
+              </li>
+              <li ng-hide="thread.state === 'open'">
+                <a href="" ng-click="addReviewComment({body: '!resolve'}, ref); dropdownOpen = false;">
+                  <i class="fa fa-exclamation text-warning"></i> resolve
+                </a>
+              </li>
+              <li ng-hide="thread.state === 'closed'">
+                <a href="" ng-click="addReviewComment({body: '!fixed'}, ref); dropdownOpen = false;">
+                    <i class="fa fa-check text-primary"></i> fixed
+                </a>
+              </li>
+              <li ng-hide="thread.state === 'closed'">
+                <a href="" ng-click="addReviewComment({body: '!resolved'}, ref); dropdownOpen = false;">
+                  <i class="fa fa-check text-primary"></i> resolved
+                </a>
+              </li>
+              <li ng-hide="thread.state === 'closed'">
+                <a href="" ng-click="addReviewComment({body: '!completed'}, ref); dropdownOpen = false;">
+                  <i class="fa fa-check text-primary"></i> completed
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <i class="fa fa-2x fa-spinner fa-spin center-block" ng-show="review.loading" style="margin-top: 10px;"></i>
+
+  </tab>
+  
+  <tab active="$stateParams.conversation">
+    <tab-heading>
+      <span class="octicon octicon-comment-discussion"></span> 
+      <span class="hidden-sm hidden-md">Conversation</span>
+    </tab-heading>
+    <div style="padding:20px 10px; margin-bottom:20px;">
+      <table style="width:100%;">
+        <tr ng-repeat="comment in conversation.value | unique:'id'" ng-show="comment.html">
+          <td style="width:42px; padding-right:10px; vertical-align:top;">
+            <img ng-show="comment.user" ng-src="{{ comment.user ? comment.user.avatar_url + '&s=42' : '/assets/images/user_deleted.jpg'}}" width="42px" />
+          </td>
+          <td>
+            <div class="panel panel-default comment">
+              <div class="panel-heading">
+                <div class="panel-arrow"></div>
+                <a ng-href="{{ comment.user.html_url }}"><strong>{{ comment.user.login }}</strong></a> 
+                commented <a moment="comment.created_at" ng-href="{{ comment.html_url }}"></a></span>
+              </div>
+              <div class="panel-body" ng-bind-html="comment.html"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <i class="fa fa-2x fa-spinner fa-spin center-block" ng-show="conversation.loading"></i>
+
+      <form role="form" ng-submit="addComment(comment); comment='';">
+        <table style="width:100%" ng-show="!conversation.loading && !conversation.hasMore">
+          <tr>
+            <td style="width:42px; padding-right:10px; vertical-align:top;">
+              <img ng-src="{{ user.value.avatar_url }}&s=42" width="42px" />
+            </td>
+            <td>
+              <div class="panel panel-default comment">
+                <div class="panel-heading">
+                  <div class="panel-arrow"></div>
+                  <strong>{{ user.value.login }}</strong>
+                  <button ng-click="preview(comment)" 
+                          ng-show="comment.body"
+                          type="button"
+                          class="btn btn-xs btn-default pull-right">
+                    {{ comment.html ? 'Write' : 'Preview' }}
+                  </button>
+                </div>
+                <div class="panel-body" style="padding:0;">
+                  <textarea class="form-control"
+                            ng-show="!comment.html" 
+                            ng-model="comment.body" 
+                            rows="4" 
+                            placeholder="Leave pull request comment"
+                            text-complete="star"
+                            ui-keypress="{'ctrl-13': 'addComment(comment); $event.preventDefault();'}"
+                            ui-keydown="{'meta-13': 'addComment(comment); $event.preventDefault();'}">
+                  </textarea>
+                  <div ng-show="comment.html" ng-bind-html="comment.html" style="padding: 15px;"></div>
+                </div>
+              </div>
+
+              <div class="pull-right">
+                <i class="fa fa-lg fa-spinner fa-spin" ng-show="commenting.loading" style="margin-right:10px;"></i>
+                <i class="fa fa-2x fa-spinner fa-spin center-block" ng-show="conversation.loading"></i>
+                <button type="submit" class="btn btn-primary" 
+                  analytics-on="click" 
+                  analytics-event="Conversation comment created"
+                  analytics-category="Basic"
+                  ng-disabled="!comment">Comment</button>
+              </div>
+              <div style="clear:both;"></div>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </tab>
+</tabset>

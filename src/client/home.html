@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ReviewNinja</title>
+
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="/assets/images/icon-alt-152.png">
+  <link rel="apple-touch-icon-precomposed" href="/assets/images/icon-152.png">
+
+  <!-- COMPONENT STYLESHEETS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css" rel="stylesheet">
+
+  <!-- FONTS -->
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800" rel="stylesheet" type="text/css">
+  <link href="/assets/fonts/ninjaicons.css" rel="stylesheet" type="text/css">
+
+  <!-- APP STYLESHEET -->
+  <link href="/assets/styles/app.css" rel="stylesheet">
+</head>
+
+<body ng-controller="RootCtrl" ng-class="{error: $state.current.name === 'error'}">
+
+  <!-- the navbar -->
+  <div class="navbar navbar-default navbar-static-top no-select" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand pull-left" href="/" style="padding:12px 15px; font-size:13px; vertical-align:bottom;">
+          <img src="/assets/images/logo.png">
+        </a>
+        <div class="clearfix"></div>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right buttonstopbar" ng-show="user.loaded" style="font-size:12px;" ng-cloak>
+          <li><a target="_blank" href="https://www.review.ninja">ABOUT</a></li>
+          <li><a target="_blank" href="https://docs.review.ninja">DOCUMENTATION</a></li>
+          <li><a target="_blank" href="https://enterprise.review.ninja">ENTERPRISE</a></li>
+          <li ng-show="$config.terms"><a target="_blank" ng-href="{{ $config.terms }}">TERMS</a></li>
+          <li class="hidden-xs hidden-sm"><a href="">Signed in as {{ user.value.login }}</a></li>
+          <li class="hidden-xs">
+            <a class="action" href="/logout" target="_self" tooltip="Sign out" tooltip-append-to-body="true" tooltip-placement="bottom">
+              <i class="fa fa-lg fa-sign-out"></i>
+            </a>
+          </li>
+          <li class="visible-xs">
+            <a class="action" href="/logout" target="_self">Sign out <i class="fa fa-lg fa-sign-out pull-right"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- the survey bar -->
+  <div class="container-fluid" ng-cloak ng-show="user.value && user.value.history.welcome && $config.survey && $config.survey !== user.value.history.survey">
+    <div class="row">
+      <div class="col-md-12 alert alert-info" style="margin:0;">
+        <strong>We could sure use your help!</strong> Would you be willing to give us some quick (5-10 mins) feedback?
+        <a role="button"
+           class="btn btn-primary btn-xs pull-right"
+           ng-click="dismiss('survey', $config.survey)"
+           ng-href="{{ $config.survey }}"
+           target="_blank">
+          Sure!
+        </a>
+        <a role="button"
+           class="btn btn-default btn-xs pull-right"
+           style="margin-right: 10px;"
+           ng-click="dismiss('survey', $config.survey)">
+          No, thanks
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- the application -->
+  <div class="container-fluid" style="margin-bottom:40px;">
+    <div class="row">
+      <div class="col-md-12">
+        <section ui-view></section>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT SCRIPTS -->
+  <script src="//cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.min.js"></script>
+  <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-sanitize.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-route.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+  <script src="//www.google-analytics.com/analytics.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics-ga.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/0.2.2/jquery.textcomplete.min.js"></script>
+  <script src="/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+  <script src="/lib/angular-filter/dist/angular-filter.min.js"></script>
+
+  <!-- APP -->
+  <script src="/app.js"></script>
+  <script src="/api.js"></script>
+
+  <script src="/modules/config.js"></script>
+
+  <!-- FILTERS -->
+  <script src="/filters/in.js"></script>
+  <script src="/filters/deep.js"></script>
+  <script src="/filters/pluralize.js"></script>
+
+  <!-- SERVICES -->
+  <script src="/services/Comment.js"></script>
+  <script src="/services/File.js"></script>
+  <script src="/services/Extra.js"></script>
+  <script src="/services/Pull.js"></script>
+  <script src="/services/Markdown.js"></script>
+  <script src="/services/Reference.js"></script>
+  <script src="/services/socket.js"></script>
+
+  <!-- DIRECTIVES -->
+  <script src="/directives/browser.js"></script>
+  <script src="/directives/diff.js"></script>
+  <script src="/directives/file.js"></script>
+  <script src="/directives/focus.js"></script>
+  <script src="/directives/graph.js"></script>
+  <script src="/directives/scroll.js"></script>
+  <script src="/directives/merge.js"></script>
+  <script src="/directives/moment.js"></script>
+  <script src="/directives/onboard.js"></script>
+  <script src="/directives/textComplete.js"></script>
+
+  <!-- MODALS -->
+  <script src="/modals/badge.js"></script>
+
+  <!-- CONTROLLERS -->
+  <script src="/controller/root.js"></script>
+  <script src="/controller/home.js"></script>
+  <script src="/controller/repo.js"></script>
+  <script src="/controller/pull.js"></script>
+  <script src="/controller/review.js"></script>
+  <script src="/controller/settings.js"></script>
+
+  <!-- INTERCEPTORS -->
+  <script src="/interceptors/401.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+.pull-tabs {
+  .nav-tabs {
+    > li > a {
+      color: @brand-primary;
+
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-user-select: none;    
+      user-select: none;
+    }
+
+    a:hover {
+      border-bottom: 0;
+      color: @brand-primary-hover;
+      cursor: pointer;
+    }
+  }
+}
+
+.review-tabs {
+  .nav-tabs {
+    background: @gray-darker;
+
+    > li > a {
+      background: none;
+      border: 0;
+      color: @gray;
+
+      @media only screen and (min-width: 1200px) and (max-width: 1600px) {
+        padding: 15px 10px;
+      }
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    > li.active > a {
+      background: none;
+      border: 0;
+      color: #fff;
+    }
+  }
+}
